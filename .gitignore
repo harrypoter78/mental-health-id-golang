@@ -1,0 +1,58 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.o
+*.a
+*.out
+
+# Go binary, built with `go build`
+/mental-health-id-golang
+/mental-health-id
+mental-health-id.exe
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+*.cover
+
+# Go workspace file
+go.work
+
+# Vendor directory
+/vendor/
+
+# Environment variables (keep .env.example in repo)
+.env
+.env.local
+.env.*.local
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.swn
+*.tmp
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Build artifacts
+build/
+dist/
+bin/
+*.o
+*.a
+
+# OS files
+.DS_Store
+Thumbs.db
+ehthumbs.db

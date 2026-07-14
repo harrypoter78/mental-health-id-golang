@@ -1,0 +1,81 @@
+{{ define "content" }}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        {{ if .Data.DiagnosisTertinggi }}
+            <div class="card mb-4 border-success">
+                <div class="card-header bg-success text-white">
+                    <h4 class="mb-0"><i class="bi bi-check-circle"></i> Hasil Diagnosis</h4>
+                </div>
+                <div class="card-body">
+                    <h5>Halo, <strong>{{ .Data.NamaPasien }}</strong></h5>
+                    <hr>
+                    <div class="alert alert-warning" role="alert">
+                        <i class="bi bi-exclamation-triangle"></i> <strong>Penting!</strong> Hasil ini hanya untuk informasi awal. Segera konsultasikan dengan profesional kesehatan mental untuk diagnosis yang akurat.
+                    </div>
+                    <h6 class="text-success fw-bold mb-3"><i class="bi bi-arrow-right-circle-fill"></i> Diagnosis Utama:</h6>
+                    <div class="card bg-light border-success mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h4 class="text-success">{{ .Data.DiagnosisTertinggi.Penyakit.NamaPenyakit }}</h4>
+                                    <p class="text-muted mb-2"><i class="bi bi-code-square"></i> Kode: <strong>{{ .Data.DiagnosisTertinggi.Penyakit.KodePenyakit }}</strong></p>
+                                    <p class="mb-0">{{ .Data.DiagnosisTertinggi.Penyakit.Deskripsi }}</p>
+                                </div>
+                                <div class="col-md-4 text-end">
+                                    <div class="display-4 text-success fw-bold">{{ .Data.DiagnosisTertinggi.Persentase }}%</div>
+                                    <p class="text-muted">Tingkat Kecocokan</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="fw-bold">Solusi Obat-obatan:</h6>
+                                    <p>{{ .Data.DiagnosisTertinggi.Penyakit.SolusiObat }}</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6 class="fw-bold">Solusi Lainnya:</h6>
+                                    <p>{{ .Data.DiagnosisTertinggi.Penyakit.SolusiLain }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{ if gt (len .Data.HasilDiagnosis) 1 }}
+                <div class="card mb-4">
+                    <div class="card-header bg-info text-white"><h5 class="mb-0"><i class="bi bi-graph-up"></i> Hasil Diagnosis Lainnya</h5></div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr><th>Penyakit</th><th>Keterangan</th><th>Kecocokan</th></tr>
+                                </thead>
+                                <tbody>
+                                    {{ range $index, $hasil := .Data.HasilDiagnosis }}
+                                        {{ if gt $index 0 }}
+                                            <tr>
+                                                <td><strong>{{ $hasil.Penyakit.NamaPenyakit }}</strong><br><small class="text-muted">{{ $hasil.Penyakit.KodePenyakit }}</small></td>
+                                                <td>{{ $hasil.Penyakit.Deskripsi }}</td>
+                                                <td><span class="badge bg-warning text-dark">{{ $hasil.Persentase }}% ({{ $hasil.Cocok }}/{{ $hasil.Total }})</span></td>
+                                            </tr>
+                                        {{ end }}
+                                    {{ end }}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {{ end }}
+        {{ else }}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="bi bi-exclamation-circle"></i> <strong>Tidak Ada Diagnosis!</strong> Gejala yang Anda pilih tidak sesuai dengan data yang tersedia dalam sistem.
+            </div>
+        {{ end }}
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-between mt-4">
+            <a href="/" class="btn btn-outline-secondary"><i class="bi bi-house"></i> Kembali ke Beranda</a>
+            <a href="/diagnosis/kuis" class="btn btn-primary"><i class="bi bi-arrow-repeat"></i> Diagnosis Ulang</a>
+        </div>
+    </div>
+</div>
+{{ end }}

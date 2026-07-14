@@ -1,0 +1,230 @@
+{{ define "content" }}
+<div class="row justify-content-center align-items-center w-100 m-0">
+    <div class="col-md-6 col-lg-5">
+        <div class="auth-form p-4 p-md-5 shadow-sm rounded-4 bg-white">
+            <div id="login-form" class="{{ if ne .FormMode "register" }}active{{ end }}">
+                <div class="text-center mb-4">
+                    <div class="auth-icon mb-3">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                    </div>
+                    <h2 class="auth-title">Selamat Datang</h2>
+                    <p class="text-muted mb-0">Masuk ke akun Anda untuk melanjutkan</p>
+                </div>
+
+                <form method="POST" action="/login" novalidate>
+                    <div class="mb-3">
+                        <label for="email" class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control {{ if index .Errors "email" }}is-invalid{{ end }}" id="email" name="email" value="{{ index .Form "email" }}" required autofocus placeholder="Masukkan email Anda">
+                        {{ if index .Errors "email" }}<div class="invalid-feedback">{{ index .Errors "email" }}</div>{{ end }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="password" class="form-label fw-bold">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control {{ if index .Errors "password" }}is-invalid{{ end }}" id="password" name="password" required placeholder="Masukkan password Anda">
+                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password"><i class="bi bi-eye"></i></button>
+                        </div>
+                        {{ if index .Errors "password" }}<div class="invalid-feedback d-block">{{ index .Errors "password" }}</div>{{ end }}
+                    </div>
+                    <button type="submit" class="btn btn-auth w-100 mb-3">Login</button>
+                </form>
+
+                <div class="divider"><span>Atau</span></div>
+                <p class="text-center text-muted mb-0">Belum punya akun? <a href="/register" class="auth-toggle">Daftar sekarang</a></p>
+            </div>
+
+            <div id="register-form" class="{{ if eq .FormMode "register" }}active{{ end }}">
+                <div class="text-center mb-4">
+                    <div class="auth-icon auth-icon-success mb-3">
+                        <i class="bi bi-person-plus"></i>
+                    </div>
+                    <h2 class="auth-title">Buat Akun Baru</h2>
+                    <p class="text-muted mb-0">Daftar untuk menyimpan riwayat diagnosis dan menggunakan fitur lengkap</p>
+                </div>
+
+                <form method="POST" action="/register" novalidate>
+                    <div class="mb-3">
+                        <label for="name" class="form-label fw-bold">Nama Lengkap</label>
+                        <input type="text" class="form-control {{ if index .Errors "name" }}is-invalid{{ end }}" id="name" name="name" value="{{ index .Form "name" }}" required placeholder="Masukkan nama lengkap">
+                        {{ if index .Errors "name" }}<div class="invalid-feedback">{{ index .Errors "name" }}</div>{{ end }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="email_reg" class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control {{ if index .Errors "email" }}is-invalid{{ end }}" id="email_reg" name="email" value="{{ index .Form "email" }}" required placeholder="Masukkan email Anda">
+                        {{ if index .Errors "email" }}<div class="invalid-feedback">{{ index .Errors "email" }}</div>{{ end }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_reg" class="form-label fw-bold">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control {{ if index .Errors "password" }}is-invalid{{ end }}" id="password_reg" name="password" required placeholder="Minimal 6 karakter">
+                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password_reg"><i class="bi bi-eye"></i></button>
+                        </div>
+                        {{ if index .Errors "password" }}<div class="invalid-feedback d-block">{{ index .Errors "password" }}</div>{{ end }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="password_confirmation" class="form-label fw-bold">Konfirmasi Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control {{ if index .Errors "password_confirmation" }}is-invalid{{ end }}" id="password_confirmation" name="password_confirmation" required placeholder="Ulangi password Anda">
+                            <button class="btn btn-outline-secondary toggle-password" type="button" data-target="#password_confirmation"><i class="bi bi-eye"></i></button>
+                        </div>
+                        {{ if index .Errors "password_confirmation" }}<div class="invalid-feedback d-block">{{ index .Errors "password_confirmation" }}</div>{{ end }}
+                    </div>
+                    <button type="submit" class="btn btn-auth btn-auth-success w-100 mb-3">Daftar</button>
+                </form>
+
+                <div class="divider"><span>Atau</span></div>
+                <p class="text-center text-muted mb-0">Sudah punya akun? <a href="/login" class="auth-toggle">Login di sini</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
+
+{{ define "styles" }}
+<style>
+    .auth-form {
+        background: #ffffff;
+        border-radius: 24px;
+        padding: 35px 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .auth-icon {
+        width: 70px;
+        height: 70px;
+        margin: 0 auto;
+        background: linear-gradient(135deg, #6f42c1 0%, #764ba2 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: #ffffff;
+    }
+
+    .auth-icon-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    }
+
+    #login-form,
+    #register-form {
+        display: none;
+    }
+
+    #login-form.active,
+    #register-form.active {
+        display: block;
+    }
+
+    .auth-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .btn-auth {
+        background: linear-gradient(135deg, #6f42c1 0%, #764ba2 100%);
+        color: #ffffff;
+        border: none;
+        padding: 12px 18px;
+        font-weight: 600;
+        border-radius: 10px;
+        transition: all 0.25s ease;
+    }
+
+    .btn-auth:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(111, 66, 193, 0.18);
+    }
+
+    .btn-auth-success {
+        background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        margin: 28px 0;
+        color: #999;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e0e0e0;
+    }
+
+    .divider span {
+        padding: 0 14px;
+        font-size: 13px;
+    }
+
+    .input-group .form-control {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .input-group .btn {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    @media (max-width: 768px) {
+        .auth-form {
+            padding: 28px 20px;
+        }
+    }
+</style>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const showRegister = '{{ .FormMode }}' === 'register';
+
+        if (showRegister) {
+            loginForm.classList.remove('active');
+            registerForm.classList.add('active');
+        } else {
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        }
+
+        document.querySelectorAll('.auth-toggle').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const showRegisterForm = this.getAttribute('href') === '/register';
+                if (showRegisterForm) {
+                    loginForm.classList.remove('active');
+                    registerForm.classList.add('active');
+                } else {
+                    loginForm.classList.add('active');
+                    registerForm.classList.remove('active');
+                }
+            });
+        });
+
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                const passwordInput = document.querySelector(targetId);
+                const icon = this.querySelector('i');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    icon.classList.remove('bi-eye');
+                    icon.classList.add('bi-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    icon.classList.remove('bi-eye-slash');
+                    icon.classList.add('bi-eye');
+                }
+            });
+        });
+    });
+</script>
+{{ end }}

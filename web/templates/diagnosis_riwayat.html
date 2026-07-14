@@ -1,0 +1,58 @@
+{{ define "content" }}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-clock-history"></i> Riwayat Diagnosis{{ if .CurrentUser }} - {{ .CurrentUser.Name }}{{ end }}</h4>
+            </div>
+            <div class="card-body">
+                {{ if gt (len .Data.Riwayat) 0 }}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    {{ if not .CurrentUser }}<th>Nama Pengguna</th>{{ end }}
+                                    <th>Nama Penyakit</th>
+                                    <th>Tanggal Diagnosis</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{ range $index, $item := .Data.Riwayat }}
+                                    <tr>
+                                        <td>{{ add $.Data.Pagination.StartIndex $index }}</td>
+                                        {{ if not $.CurrentUser }}<td>{{ if $item.User }}{{ $item.User.Name }}{{ else }}Anonymous{{ end }}</td>{{ end }}
+                                        <td><span class="badge bg-info">{{ $item.NamaPenyakit }}</span></td>
+                                        <td>{{ $item.Tanggal.Format "2006-01-02" }}</td>
+                                    </tr>
+                                {{ end }}
+                            </tbody>
+                        </table>
+                    </div>
+                    {{ if gt .Data.Pagination.TotalPages 1 }}
+                        <nav>
+                            <ul class="pagination justify-content-center">
+                                {{ if gt .Data.Pagination.Page 1 }}
+                                    <li class="page-item"><a class="page-link" href="?page={{ sub .Data.Pagination.Page 1 }}">Sebelumnya</a></li>
+                                {{ end }}
+                                {{ range $i, $p := .Data.Pagination.Pages }}
+                                    <li class="page-item {{ if eq $.Data.Pagination.Page $p }}active{{ end }}"><a class="page-link" href="?page={{ $p }}">{{ $p }}</a></li>
+                                {{ end }}
+                                {{ if lt .Data.Pagination.Page .Data.Pagination.TotalPages }}
+                                    <li class="page-item"><a class="page-link" href="?page={{ add .Data.Pagination.Page 1 }}">Berikutnya</a></li>
+                                {{ end }}
+                            </ul>
+                        </nav>
+                    {{ end }}
+                {{ else }}
+                    <div class="text-center py-5 text-muted">
+                        <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                        <h5 class="mt-3">Belum ada riwayat diagnosis.</h5>
+                        <p>Mulai diagnosis untuk melihat riwayat di sini.</p>
+                    </div>
+                {{ end }}
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}

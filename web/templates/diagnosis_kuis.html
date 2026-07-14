@@ -1,0 +1,51 @@
+{{ define "content" }}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-clipboard2-check"></i> Kuis Diagnosis Gejala</h4>
+            </div>
+            <div class="card-body">
+                {{ if not .CurrentUser }}
+                    <div class="alert alert-info mb-4 d-flex align-items-center">
+                        <i class="bi bi-info-circle me-2"></i>
+                        <p class="mb-0">Anda dapat melakukan diagnosis tanpa login. Untuk menyimpan riwayat diagnosis, silakan <a href="/login" class="alert-link">login terlebih dahulu</a>.</p>
+                    </div>
+                {{ else }}
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Nama Anda:</label>
+                        <input type="text" class="form-control" disabled value="{{ .CurrentUser.Name }}">
+                        <small class="text-muted">Data diambil dari akun Anda</small>
+                    </div>
+                {{ end }}
+
+                <form action="/diagnosis/proses" method="POST">
+                    <div class="mb-4">
+                        <p class="fw-bold text-muted"><i class="bi bi-info-circle"></i> Silahkan centang gejala yang Anda alami (minimal 1):</p>
+                        {{ if index .Errors "gejala" }}
+                            <div class="alert alert-danger">{{ index .Errors "gejala" }}</div>
+                        {{ end }}
+                        <div class="row g-3">
+                            {{ $selected := index .Data "Selected" }}
+                            {{ range $index, $g := index .Data "Gejala" }}
+                                <div class="col-md-6">
+                                    <div class="form-check p-3 border rounded" style="background: #f8f9fa; cursor: pointer;">
+                                        <input class="form-check-input" type="checkbox" name="gejala" value="{{ $g.KodeGejala }}" id="gejala_{{ $g.ID }}" {{ if contains $selected $g.KodeGejala }}checked{{ end }}>
+                                        <label class="form-check-label w-100" for="gejala_{{ $g.ID }}" style="cursor: pointer;">
+                                            <strong>{{ $g.KodeGejala }}</strong> - {{ $g.NamaGejala }}
+                                        </label>
+                                    </div>
+                                </div>
+                            {{ end }}
+                        </div>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/" class="btn btn-secondary d-flex align-items-center justify-content-center">Batal</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-play-fill"></i> Mulai Diagnosis</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{{ end }}
